@@ -1,6 +1,5 @@
 /**
- * Recreates portal/public/covers → ../../covers junction (Windows).
- * Run from portal/: node scripts/setup-covers-link.mjs
+ * Ensures portal/public/covers points at repo-root covers/ (Windows junction or Unix symlink).
  */
 import { execSync } from "child_process";
 import fs from "fs";
@@ -9,10 +8,10 @@ import { fileURLToPath } from "url";
 
 const portalDir = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
 const linkPath = path.join(portalDir, "public", "covers");
-const targetPath = path.join(portalDir, "..", "covers");
+const targetPath = path.resolve(portalDir, "..", "covers");
 
-if (process.platform !== "win32") {
-  console.log("On macOS/Linux, symlink manually: ln -s ../../covers public/covers");
+if (!fs.existsSync(targetPath)) {
+  console.warn("covers/ folder not found at repo root:", targetPath);
   process.exit(0);
 }
 
@@ -22,5 +21,11 @@ if (fs.existsSync(linkPath)) {
 }
 
 fs.mkdirSync(path.join(portalDir, "public"), { recursive: true });
-execSync(`mklink /J "${linkPath}" "${path.resolve(targetPath)}"`, { stdio: "inherit" });
-console.log("Junction created.");
+
+if (process.platform === "win32") {
+  execSync(`mklink /J "${linkPath}" "${targetPath}"`, { stdio: "inherit" });
+} else {
+  fs.symlinkSync(targetPath, linkPath, "dir");
+}
+
+console.log("covers link created:", linkPath, "→", targetPath);
