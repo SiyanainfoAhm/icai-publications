@@ -1,5 +1,10 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "installCommand": "npm install --prefix portal",
-  "buildCommand": "npm run build --prefix portal"
+  "builds": [
+    {
+      "src": "portal/package.json",
+      "use": "@vercel/next"
+    }
+  ]
 }
