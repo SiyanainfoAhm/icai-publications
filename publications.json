@@ -1,0 +1,46 @@
+[
+  {
+    "slug": "ca-journal-may-2026",
+    "title": "The Chartered Accountant Journal — May 2026",
+    "committee": "Board of Studies",
+    "topic": "Professional Updates",
+    "cover_image_url": "/covers/ca-journal.png",
+    "synopsis": "Monthly flagship journal covering auditing standards, GST developments, corporate governance, and professional ethics for members and students.",
+    "release_date": "2026-05-01",
+    "content_file": "content/ca-journal-may-2026.html",
+    "status": "published"
+  },
+  {
+    "slug": "handbook-audit-2026",
+    "title": "Handbook on Audit & Assurance 2026",
+    "committee": "Auditing & Assurance Standards Board",
+    "topic": "Audit & Assurance",
+    "cover_image_url": "/covers/handbook-audit-2026.svg",
+    "synopsis": "Comprehensive reference for auditors on standards, quality management, and reporting obligations effective for audits of financial statements for periods beginning on or after 1 April 2026.",
+    "release_date": "2026-04-15",
+    "content_file": "content/handbook-audit-2026.html",
+    "status": "published"
+  },
+  {
+    "slug": "gst-compendium-q1-2026",
+    "title": "GST Compendium — Q1 2026",
+    "committee": "GST & Indirect Taxes Committee",
+    "topic": "GST",
+    "cover_image_url": "/covers/gst-compendium.svg",
+    "synopsis": "Quarterly compendium of GST notifications, FAQs, and worked examples for practitioners and industry finance teams.",
+    "release_date": "2026-03-20",
+    "content_file": "content/gst-compendium-q1-2026.html",
+    "status": "published"
+  },
+  {
+    "slug": "draft-ethics-circular",
+    "title": "Draft Ethics Circular (Internal)",
+    "committee": "Ethics Committee",
+    "topic": "Professional Ethics",
+    "cover_image_url": "/covers/ethics-draft.svg",
+    "synopsis": "Internal draft — not for public distribution until approved by Council.",
+    "release_date": null,
+    "content_file": "content/draft-ethics-circular.html",
+    "status": "draft"
+  }
+]

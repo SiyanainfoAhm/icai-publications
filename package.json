@@ -1,0 +1,13 @@
+{
+  "name": "icai-publications",
+  "private": true,
+  "description": "ICAI Publications Portal — run scripts from repo root",
+  "scripts": {
+    "dev": "npm run dev --prefix portal",
+    "build": "npm run build --prefix portal",
+    "start": "npm run start --prefix portal",
+    "lint": "npm run lint --prefix portal",
+    "setup": "npm run setup --prefix portal",
+    "install:portal": "npm install --prefix portal"
+  }
+}

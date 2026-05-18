@@ -1,0 +1,94 @@
+@import "tailwindcss";
+
+:root {
+  --icai-navy: #0b1f3a;
+  --icai-navy-light: #14325c;
+  --icai-gold: #c9a227;
+  --icai-gold-soft: #e8d48a;
+  --icai-cream: #f7f5f0;
+  --icai-slate: #4a5568;
+  --background: var(--icai-cream);
+  --foreground: #1a202c;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-icai-navy: var(--icai-navy);
+  --color-icai-gold: var(--icai-gold);
+  --font-sans: var(--font-geist-sans);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-geist-sans), "Segoe UI", system-ui, sans-serif;
+}
+
+.icai-header {
+  background: linear-gradient(135deg, var(--icai-navy) 0%, var(--icai-navy-light) 100%);
+  border-bottom: 3px solid var(--icai-gold);
+}
+
+.icai-btn-primary {
+  background: var(--icai-navy);
+  color: #fff;
+  border: 1px solid var(--icai-gold);
+}
+
+.icai-btn-primary:hover {
+  background: var(--icai-navy-light);
+}
+
+.icai-card {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 1px 3px rgb(11 31 58 / 8%);
+}
+
+.icai-badge {
+  background: var(--icai-gold-soft);
+  color: var(--icai-navy);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+/* Secure reader — suppress print UI in demo */
+.secure-reader {
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+@media print {
+  .secure-reader,
+  .no-print {
+    display: none !important;
+  }
+  body::after {
+    content: "Printing is disabled for this demo publication.";
+    display: block;
+    padding: 2rem;
+    text-align: center;
+  }
+}
+
+.icai-reader-content h1 {
+  font-size: 1.75rem;
+  color: var(--icai-navy);
+  margin-bottom: 1rem;
+}
+
+.icai-reader-content h2 {
+  font-size: 1.25rem;
+  color: var(--icai-navy-light);
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.icai-reader-content p,
+.icai-reader-content li {
+  line-height: 1.7;
+  color: #2d3748;
+}

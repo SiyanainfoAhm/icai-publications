@@ -1,0 +1,18 @@
+# Dependencies
+portal/node_modules/
+
+# Build
+portal/.next/
+portal/out/
+
+# Env
+.env
+.env.local
+portal/.env.local
+
+# Logs
+*.log
+
+# OS
+.DS_Store
+Thumbs.db

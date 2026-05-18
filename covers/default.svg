@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="520" viewBox="0 0 400 520">
+  <rect width="400" height="520" fill="#0b1f3a"/>
+  <rect x="24" y="24" width="352" height="8" fill="#c9a227"/>
+  <text x="200" y="280" text-anchor="middle" fill="#c9a227" font-family="Georgia,serif" font-size="28">ICAI</text>
+  <text x="200" y="320" text-anchor="middle" fill="#f7f5f0" font-family="sans-serif" font-size="14">Publications</text>
+</svg>

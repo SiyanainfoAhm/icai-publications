@@ -1,0 +1,12 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "../ca-journal-poc",
+			"name": "CA Journal POC (legacy Vite)"
+		}
+	],
+	"settings": {}
+}

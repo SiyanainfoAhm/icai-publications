@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="520" viewBox="0 0 400 520">
+  <rect width="400" height="520" fill="#14325c"/>
+  <rect x="0" y="0" width="400" height="120" fill="#c9a227"/>
+  <text x="200" y="70" text-anchor="middle" fill="#0b1f3a" font-family="Georgia,serif" font-size="22" font-weight="bold">The Chartered Accountant</text>
+  <text x="200" y="260" text-anchor="middle" fill="#f7f5f0" font-family="sans-serif" font-size="18">May 2026</text>
+  <text x="200" y="300" text-anchor="middle" fill="#e8d48a" font-size="12">Board of Studies · ICAI</text>
+</svg>
