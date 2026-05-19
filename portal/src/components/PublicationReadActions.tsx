@@ -63,7 +63,7 @@ export function PublicationReadActions({
             href={`/flipbook/${slug}`}
             className="inline-block rounded bg-[var(--icai-gold)] px-5 py-2 text-sm font-semibold text-[var(--icai-navy)] hover:opacity-90"
           >
-            Open flipbook
+            Flipbook
           </Link>
         )}
         <Link
@@ -74,7 +74,7 @@ export function PublicationReadActions({
               : "bg-[var(--icai-gold)] text-[var(--icai-navy)] hover:opacity-90"
           }`}
         >
-          Secure article view
+          Article
         </Link>
       </div>
     </aside>

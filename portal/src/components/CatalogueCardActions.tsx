@@ -3,15 +3,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { canAccessReader } from "@/lib/auth/access";
-import { publicationSupportsFlipbook } from "@/lib/flipbook";
 import type { PublicationMeta, SessionUser } from "@/lib/types";
-
-function readHref(publication: PublicationMeta): string {
-  if (publicationSupportsFlipbook(publication)) {
-    return `/flipbook/${publication.slug}`;
-  }
-  return `/reader/${publication.slug}`;
-}
 
 export function CatalogueCardActions({ publication }: { publication: PublicationMeta }) {
   const [user, setUser] = useState<SessionUser | null>(null);
@@ -24,7 +16,8 @@ export function CatalogueCardActions({ publication }: { publication: Publication
       .finally(() => setReady(true));
   }, []);
 
-  const loginHref = `/login?redirect=${encodeURIComponent(`/publications/${publication.slug}`)}`;
+  const detailHref = `/publications/${publication.slug}`;
+  const loginHref = `/login?redirect=${encodeURIComponent(detailHref)}`;
 
   if (!ready) {
     return (
@@ -37,10 +30,10 @@ export function CatalogueCardActions({ publication }: { publication: Publication
   if (canAccessReader(user)) {
     return (
       <Link
-        href={readHref(publication)}
+        href={detailHref}
         className="icai-btn-primary mt-4 inline-block rounded-lg px-4 py-2 text-sm font-semibold transition hover:opacity-95"
       >
-        Read Flipbook
+        View publication
       </Link>
     );
   }
@@ -50,7 +43,7 @@ export function CatalogueCardActions({ publication }: { publication: Publication
       href={loginHref}
       className="mt-4 inline-block rounded-lg border-2 border-[var(--icai-navy)] bg-white px-4 py-2 text-sm font-semibold text-[var(--icai-navy)] transition hover:bg-[var(--icai-cream)]"
     >
-      Login to Read
+      Login to read
     </Link>
   );
 }
