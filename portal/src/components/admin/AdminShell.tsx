@@ -19,7 +19,11 @@ const links = [
 
 export function AdminShell({ children }: { children: ReactNode }) {
   const pathname = usePathname();
-  const wideContent = pathname === "/admin/publications/bulk";
+  const wideContent =
+    pathname === "/admin/publications" ||
+    pathname === "/admin/publications/bulk" ||
+    pathname.startsWith("/admin/publications/") ||
+    pathname === "/admin/users";
 
   /** Exact path match only — avoids /publications matching /publications/bulk. */
   function isActive(href: string) {

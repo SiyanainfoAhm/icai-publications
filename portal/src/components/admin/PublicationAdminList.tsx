@@ -209,10 +209,10 @@ export function PublicationAdminList() {
                     {formatPublicationStatus(row.status)}
                   </td>
                   <td className="col-actions">
-                    <div className="flex flex-wrap gap-2">
+                    <div className="admin-row-actions">
                       <Link
                         href={`/admin/publications/${row.id}/edit`}
-                        className="icai-file-btn text-xs"
+                        className="icai-action-btn icai-action-btn--outline"
                       >
                         Edit
                       </Link>
@@ -250,15 +250,16 @@ export function PublicationAdminList() {
                         <button
                           type="button"
                           onClick={() => copyPdfUrl(row)}
-                          className="icai-file-btn text-xs"
+                          className="icai-action-btn icai-action-btn--outline"
+                          title="Copy authorized PDF URL"
                         >
-                          PDF URL
+                          PDF
                         </button>
                       )}
                       <button
                         type="button"
                         onClick={() => setDeleteTarget(row)}
-                        className="rounded border border-red-300 px-2 py-1 text-xs font-semibold text-red-700 hover:bg-red-50"
+                        className="icai-action-btn icai-action-btn--delete"
                       >
                         Delete
                       </button>
