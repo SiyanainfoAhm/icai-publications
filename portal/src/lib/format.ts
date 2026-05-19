@@ -1,4 +1,14 @@
-import type { IcaiUserRole } from "@/lib/types";
+import {
+  DOWNLOAD_PERMISSION_LABELS,
+  PUBLICATION_TYPE_LABELS,
+  VISIBILITY_LABELS,
+} from "@/lib/publication-sow";
+import type {
+  DownloadPermission,
+  IcaiUserRole,
+  PublicationType,
+  PublicationVisibility,
+} from "@/lib/types";
 
 export function formatRole(role: string | null | undefined): string {
   switch (role) {
@@ -26,6 +36,18 @@ export function formatDateTime(value: string | null | undefined): string {
   } catch {
     return "—";
   }
+}
+
+export function formatPublicationType(type: string): string {
+  return PUBLICATION_TYPE_LABELS[type as PublicationType] ?? type;
+}
+
+export function formatDownloadPermission(value: string): string {
+  return DOWNLOAD_PERMISSION_LABELS[value as DownloadPermission] ?? value;
+}
+
+export function formatVisibility(value: string): string {
+  return VISIBILITY_LABELS[value as PublicationVisibility] ?? value;
 }
 
 export function formatPublicationStatus(status: string): string {

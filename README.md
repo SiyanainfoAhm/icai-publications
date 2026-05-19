@@ -21,6 +21,11 @@ Open this folder in VS Code via `icai-publications.code-workspace`.
 1. `supabase/sql/001_schema.sql` — tables, indexes, RLS
 2. `supabase/sql/002_seed.sql` — demo users (admin, member)
 3. `supabase/sql/003_publications_seed.sql` — demo publications
+4. `supabase/sql/005_storage_photomedia.sql` — cover image bucket (optional)
+5. `supabase/sql/006_publication_sow_fields.sql` — **required** for admin dashboard & upload form
+6. `supabase/sql/007_admin_cms.sql` — settings & master data (optional)
+
+See `supabase/README.md` for details.
 
 ### 2. Portal
 

@@ -5,6 +5,7 @@ import { FormEvent, useCallback, useState } from "react";
 import { OtpBoxInput } from "@/components/auth/OtpBoxInput";
 
 type Tab = "otp" | "member" | "admin";
+type OtpPhase = "email" | "code" | "name";
 
 export function LoginPanel({ className = "" }: { className?: string }) {
   const router = useRouter();
@@ -13,6 +14,8 @@ export function LoginPanel({ className = "" }: { className?: string }) {
 
   const [tab, setTab] = useState<Tab>("otp");
   const [email, setEmail] = useState("");
+  const [fullName, setFullName] = useState("");
+  const [otpPhase, setOtpPhase] = useState<OtpPhase>("email");
   const [otpSent, setOtpSent] = useState(false);
   const [otpInputKey, setOtpInputKey] = useState(0);
   const [password, setPassword] = useState("");
@@ -26,6 +29,8 @@ export function LoginPanel({ className = "" }: { className?: string }) {
 
   function changeEmail() {
     setOtpSent(false);
+    setOtpPhase("email");
+    setFullName("");
     setMessage(null);
     resetOtpStep();
   }
@@ -46,6 +51,7 @@ export function LoginPanel({ className = "" }: { className?: string }) {
       return false;
     }
     setOtpSent(true);
+    setOtpPhase("code");
     setMessageTone("info");
     setMessage(`A verification code was sent to ${targetEmail.trim().toLowerCase()}.`);
     resetOtpStep();
@@ -76,11 +82,44 @@ export function LoginPanel({ className = "" }: { className?: string }) {
         setOtpInputKey((k) => k + 1);
         return;
       }
+      if (data.needsName) {
+        setOtpPhase("name");
+        setMessageTone("info");
+        setMessage("Welcome! Please enter your name to finish signing in.");
+        return;
+      }
       router.push(redirect);
       router.refresh();
     },
     [email, loading, redirect, router],
   );
+
+  async function completeProfile(e: FormEvent) {
+    e.preventDefault();
+    const trimmed = fullName.trim();
+    if (trimmed.length < 2) {
+      setMessageTone("error");
+      setMessage("Please enter your full name.");
+      return;
+    }
+    setLoading(true);
+    setMessage(null);
+    const res = await fetch("/api/auth/otp/complete-profile", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify({ email, fullName: trimmed }),
+    });
+    const data = await res.json();
+    setLoading(false);
+    if (!res.ok) {
+      setMessageTone("error");
+      setMessage(data.error ?? "Could not save your name.");
+      return;
+    }
+    router.push(redirect);
+    router.refresh();
+  }
 
   async function passwordLogin(endpoint: string) {
     setLoading(true);
@@ -118,6 +157,11 @@ export function LoginPanel({ className = "" }: { className?: string }) {
             onClick={() => {
               setTab(t.id);
               setMessage(null);
+              if (t.id !== "otp") {
+                setOtpPhase("email");
+                setOtpSent(false);
+                setFullName("");
+              }
             }}
             className={`rounded px-3 py-1.5 text-sm font-medium ${
               tab === t.id
@@ -142,7 +186,7 @@ export function LoginPanel({ className = "" }: { className?: string }) {
         </p>
       )}
 
-      {tab === "otp" && !otpSent && (
+      {tab === "otp" && otpPhase === "email" && (
         <form onSubmit={requestOtp} className="space-y-4">
           <label className="block text-sm font-medium text-slate-700">
             Email address
@@ -169,7 +213,7 @@ export function LoginPanel({ className = "" }: { className?: string }) {
         </form>
       )}
 
-      {tab === "otp" && otpSent && (
+      {tab === "otp" && otpPhase === "code" && (
         <div className="space-y-5">
           <div className="rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-sm">
             <p className="text-slate-600">Code sent to</p>
@@ -223,6 +267,40 @@ export function LoginPanel({ className = "" }: { className?: string }) {
             </p>
           )}
         </div>
+      )}
+
+      {tab === "otp" && otpPhase === "name" && (
+        <form onSubmit={completeProfile} className="space-y-4">
+          <div className="rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-sm">
+            <p className="text-slate-600">Signing in as</p>
+            <p className="font-medium text-[var(--icai-navy)]">{email.trim().toLowerCase()}</p>
+          </div>
+          <label className="block text-sm font-medium text-slate-700">
+            Your full name
+            <input
+              type="text"
+              required
+              minLength={2}
+              maxLength={120}
+              value={fullName}
+              onChange={(e) => setFullName(e.target.value)}
+              className="mt-1 w-full rounded border border-slate-300 px-3 py-2"
+              placeholder="e.g. Priya Sharma"
+              autoFocus
+              autoComplete="name"
+            />
+          </label>
+          <button
+            type="submit"
+            disabled={loading}
+            className="icai-btn-primary w-full rounded px-4 py-2 text-sm font-semibold disabled:opacity-60"
+          >
+            {loading ? "Saving…" : "Continue to publications"}
+          </button>
+          <p className="text-xs text-slate-500">
+            We use your name for access records and admin reporting. You only need to enter it once.
+          </p>
+        </form>
       )}
 
       {tab === "member" && (

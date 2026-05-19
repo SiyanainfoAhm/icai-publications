@@ -83,13 +83,33 @@ export async function verifyOtp(
   return { ok: true };
 }
 
-export async function ensureNonMemberUser(email: string) {
+export async function hasRecentOtpVerification(email: string, withinMinutes = 15): Promise<boolean> {
+  const normalized = email.trim().toLowerCase();
+  const supabase = getSupabaseAdmin();
+  const since = new Date(Date.now() - withinMinutes * 60 * 1000).toISOString();
+
+  const { data } = await supabase
+    .from("icai_otp_logs")
+    .select("id")
+    .eq("email", normalized)
+    .eq("verified", true)
+    .gte("verified_at", since)
+    .order("verified_at", { ascending: false })
+    .limit(1)
+    .maybeSingle();
+
+  return !!data;
+}
+
+export async function ensureNonMemberUser(
+  email: string,
+): Promise<{ userId: string; needsName: boolean }> {
   const normalized = email.trim().toLowerCase();
   const supabase = getSupabaseAdmin();
 
   const { data: existing } = await supabase
     .from("icai_users")
-    .select("id, role")
+    .select("id, role, full_name")
     .eq("email", normalized)
     .maybeSingle();
 
@@ -97,7 +117,13 @@ export async function ensureNonMemberUser(email: string) {
     if (existing.role === "admin") {
       throw new Error("Use admin sign-in for this account.");
     }
-    return existing.id;
+    if (existing.role === "member") {
+      throw new Error("Use ICAI member sign-in for this account.");
+    }
+    return {
+      userId: existing.id,
+      needsName: !(existing.full_name ?? "").trim(),
+    };
   }
 
   const { data: created, error } = await supabase
@@ -111,5 +137,27 @@ export async function ensureNonMemberUser(email: string) {
     .single();
 
   if (error || !created) throw new Error(error?.message ?? "User create failed");
-  return created.id;
+  return { userId: created.id, needsName: true };
+}
+
+export async function setNonMemberFullName(
+  userId: string,
+  fullName: string,
+): Promise<void> {
+  const trimmed = fullName.trim();
+  if (trimmed.length < 2) {
+    throw new Error("Please enter your full name (at least 2 characters).");
+  }
+  if (trimmed.length > 120) {
+    throw new Error("Name is too long.");
+  }
+
+  const supabase = getSupabaseAdmin();
+  const { error } = await supabase
+    .from("icai_users")
+    .update({ full_name: trimmed, updated_at: new Date().toISOString() })
+    .eq("id", userId)
+    .eq("role", "non_member");
+
+  if (error) throw new Error(error.message);
 }

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { canReadPublications } from "@/lib/auth/guards";
 import { getTokenFromRequest, resolveSessionUser } from "@/lib/auth/session";
+import { resolveArticleContent } from "@/lib/publication-sow";
 import { getSupabaseAdmin } from "@/lib/supabase/admin";
 
 export async function GET(
@@ -22,7 +23,7 @@ export async function GET(
     const supabase = getSupabaseAdmin();
     const { data: pub, error } = await supabase
       .from("icai_publications")
-      .select("id, slug, title, content_html, status")
+      .select("id, slug, title, content_html, article_content, status")
       .eq("slug", slug)
       .maybeSingle();
 
@@ -46,7 +47,7 @@ export async function GET(
       publication: {
         slug: pub.slug,
         title: pub.title,
-        content_html: pub.content_html,
+        content_html: resolveArticleContent(pub),
       },
     });
   } catch (err) {

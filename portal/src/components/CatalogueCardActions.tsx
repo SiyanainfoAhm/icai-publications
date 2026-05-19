@@ -2,29 +2,61 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { canAccessFlipbook } from "@/lib/auth/access";
+import { canAccessReader } from "@/lib/auth/access";
 import { hasFlipbook } from "@/lib/flipbook";
-import type { SessionUser } from "@/lib/types";
+import type { PublicationMeta, SessionUser } from "@/lib/types";
 
-export function CatalogueCardActions({ slug }: { slug: string }) {
+function readHref(publication: PublicationMeta): string {
+  if (hasFlipbook(publication.slug)) {
+    return `/flipbook/${publication.slug}`;
+  }
+  if (
+    publication.publication_type === "pdf_publication" ||
+    publication.publication_type === "pdf_article"
+  ) {
+    return `/flipbook/${publication.slug}`;
+  }
+  return `/reader/${publication.slug}`;
+}
+
+export function CatalogueCardActions({ publication }: { publication: PublicationMeta }) {
   const [user, setUser] = useState<SessionUser | null>(null);
+  const [ready, setReady] = useState(false);
 
   useEffect(() => {
     fetch("/api/auth/me", { credentials: "include" })
       .then((r) => (r.ok ? r.json() : { user: null }))
-      .then((d) => setUser(d.user ?? null));
+      .then((d) => setUser(d.user ?? null))
+      .finally(() => setReady(true));
   }, []);
 
-  if (!hasFlipbook(slug) || !canAccessFlipbook(user)) {
-    return null;
+  const loginHref = `/login?redirect=${encodeURIComponent(`/publications/${publication.slug}`)}`;
+
+  if (!ready) {
+    return (
+      <p className="mt-4 text-sm text-slate-400" aria-hidden>
+        Checking access…
+      </p>
+    );
+  }
+
+  if (canAccessReader(user)) {
+    return (
+      <Link
+        href={readHref(publication)}
+        className="icai-btn-primary mt-4 inline-block rounded-lg px-4 py-2 text-sm font-semibold transition hover:opacity-95"
+      >
+        Read Flipbook
+      </Link>
+    );
   }
 
   return (
     <Link
-      href={`/flipbook/${slug}`}
-      className="mt-2 inline-block text-sm font-semibold text-[var(--icai-gold)] hover:underline"
+      href={loginHref}
+      className="mt-4 inline-block rounded-lg border-2 border-[var(--icai-navy)] bg-white px-4 py-2 text-sm font-semibold text-[var(--icai-navy)] transition hover:bg-[var(--icai-cream)]"
     >
-      Open flipbook →
+      Login to Read
     </Link>
   );
 }

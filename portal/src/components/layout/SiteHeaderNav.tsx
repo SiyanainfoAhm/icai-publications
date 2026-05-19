@@ -38,6 +38,9 @@ export function SiteHeaderNav() {
       <Link href="/" className="hover:text-[var(--icai-gold)]">
         Catalogue
       </Link>
+      <Link href="/search" className="hover:text-[var(--icai-gold)]">
+        Search
+      </Link>
 
       {user ? (
         <>

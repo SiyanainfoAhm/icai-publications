@@ -31,6 +31,9 @@ In **SQL Editor**, run from this folder:
 | 1 | `sql/001_schema.sql` | Tables, indexes, RLS |
 | 2 | `sql/002_seed.sql` | Demo users |
 | 3 | `sql/003_publications_seed.sql` | Demo publications |
+| 4 | `sql/005_storage_photomedia.sql` | `photomedia` bucket for publication covers |
+| 5 | `sql/006_publication_sow_fields.sql` | SOW fields (type, keywords, article, PDF URL, access) |
+| 6 | `sql/007_admin_cms.sql` | Admin settings & master data (committees, topics) |
 
 ## 3. Environment
 

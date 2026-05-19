@@ -2,6 +2,7 @@ import Link from "next/link";
 import { CatalogueCardActions } from "@/components/CatalogueCardActions";
 import { CoverImage } from "@/components/CoverImage";
 import { CATALOGUE_COVER_ASPECT } from "@/lib/covers";
+import { formatPublicationStatus, formatPublicationType } from "@/lib/format";
 import type { PublicationMeta } from "@/lib/types";
 
 export function PublicationCard({ publication }: { publication: PublicationMeta }) {
@@ -25,32 +26,43 @@ export function PublicationCard({ publication }: { publication: PublicationMeta 
           alt={publication.title}
           variant="catalogue"
         />
-      </section>
-      <section className="flex flex-1 flex-col p-5">
-        {publication.topic && (
-          <span className="icai-badge mb-2 inline-block w-fit rounded px-2 py-0.5">
-            {publication.topic}
+        {publication.is_featured && (
+          <span className="icai-badge icai-badge-featured absolute left-2 top-2 rounded px-2 py-0.5 shadow-sm">
+            Featured
           </span>
         )}
-        <h2 className="text-lg font-semibold text-[var(--icai-navy)]">
+      </section>
+      <section className="flex flex-1 flex-col p-5">
+        <div className="mb-2 flex flex-wrap gap-1.5">
+          <span className="icai-badge icai-badge-type rounded px-2 py-0.5">
+            {formatPublicationType(publication.publication_type)}
+          </span>
+          {publication.committee && (
+            <span className="icai-badge icai-badge-committee rounded px-2 py-0.5">
+              {publication.committee}
+            </span>
+          )}
+          <span
+            className={`icai-badge icai-badge-status icai-badge-status--${publication.status} rounded px-2 py-0.5`}
+          >
+            {formatPublicationStatus(publication.status)}
+          </span>
+        </div>
+        {publication.topic && (
+          <p className="text-xs font-medium uppercase tracking-wide text-slate-500">
+            {publication.topic}
+          </p>
+        )}
+        <h2 className="mt-1 text-lg font-semibold text-[var(--icai-navy)]">
           <Link href={`/publications/${publication.slug}`} className="hover:underline">
             {publication.title}
           </Link>
         </h2>
-        {publication.committee && (
-          <p className="mt-1 text-sm text-slate-600">{publication.committee}</p>
-        )}
         <p className="mt-3 line-clamp-3 flex-1 text-sm text-slate-700">
           {publication.synopsis}
         </p>
         <p className="mt-4 text-xs font-medium text-slate-500">Released {date}</p>
-        <Link
-          href={`/publications/${publication.slug}`}
-          className="mt-4 text-sm font-semibold text-[var(--icai-navy)] hover:text-[var(--icai-gold)]"
-        >
-          View details →
-        </Link>
-        <CatalogueCardActions slug={publication.slug} />
+        <CatalogueCardActions publication={publication} />
       </section>
     </article>
   );

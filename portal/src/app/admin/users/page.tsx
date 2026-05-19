@@ -1,18 +1,14 @@
-import { AdminDataTable } from "@/components/admin/AdminDataTable";
+import { AdminUsersPanel } from "@/components/admin/AdminUsersPanel";
 
 export default function AdminUsersPage() {
   return (
-    <AdminDataTable
-      title="Registered users"
-      endpoint="/api/admin/users"
-      emptyMessage="No users registered yet."
-      columns={[
-        { key: "email", label: "Email" },
-        { key: "name", label: "Name" },
-        { key: "accountType", label: "Account type" },
-        { key: "status", label: "Status" },
-        { key: "registered", label: "Registered" },
-      ]}
-    />
+    <>
+      <h1 className="admin-page-title">User management</h1>
+      <p className="admin-page-subtitle">
+        Search non-member and member accounts, export data, and block access. View access
+        logs for per-user publication history.
+      </p>
+      <AdminUsersPanel />
+    </>
   );
 }

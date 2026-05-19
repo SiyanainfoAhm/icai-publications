@@ -2,6 +2,12 @@ export type IcaiUserRole = "admin" | "member" | "non_member";
 
 export type PublicationStatus = "draft" | "published" | "hidden" | "archived";
 
+export type PublicationType = "pdf_publication" | "web_page_article" | "pdf_article";
+
+export type DownloadPermission = "disabled" | "controlled_download" | "admin_only";
+
+export type PublicationVisibility = "public_metadata" | "authenticated_reader";
+
 export interface IcaiUser {
   id: string;
   email: string;
@@ -16,16 +22,23 @@ export interface PublicationMeta {
   id: string;
   slug: string;
   title: string;
+  publication_type: PublicationType;
   committee: string | null;
   topic: string | null;
+  keywords: string | null;
   cover_image_url: string | null;
   synopsis: string | null;
   release_date: string | null;
   status: PublicationStatus;
+  is_featured: boolean;
+  download_permission: DownloadPermission;
+  visibility: PublicationVisibility;
 }
 
 export interface PublicationDetail extends PublicationMeta {
+  article_content?: string;
   content_html?: string;
+  pdf_file_url?: string | null;
 }
 
 export interface SessionUser {

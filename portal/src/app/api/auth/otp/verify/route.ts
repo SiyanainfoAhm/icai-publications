@@ -24,7 +24,17 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: result.message }, { status: 401 });
     }
 
-    const userId = await ensureNonMemberUser(email);
+    const { userId, needsName } = await ensureNonMemberUser(email);
+    const normalized = email.trim().toLowerCase();
+
+    if (needsName) {
+      return NextResponse.json({
+        ok: true,
+        needsName: true,
+        email: normalized,
+      });
+    }
+
     const meta = requestMeta(request);
     const token = await createSession(userId, {
       ip: meta.ip ?? undefined,
@@ -33,7 +43,8 @@ export async function POST(request: NextRequest) {
 
     const response = NextResponse.json({
       ok: true,
-      user: { email: email.trim().toLowerCase(), role: "non_member" },
+      needsName: false,
+      user: { email: normalized, role: "non_member" },
     });
     return attachSessionCookie(response, token);
   } catch (err) {
