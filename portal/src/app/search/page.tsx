@@ -6,7 +6,7 @@ import { Suspense, useCallback, useEffect, useState } from "react";
 import { Breadcrumbs } from "@/components/catalogue/Breadcrumbs";
 import { formatPublicationType } from "@/lib/format";
 import { PUBLICATION_TYPE_LABELS } from "@/lib/publication-sow";
-import { hasFlipbook } from "@/lib/flipbook";
+import { publicationSupportsFlipbook } from "@/lib/flipbook";
 import type { PublicationType } from "@/lib/types";
 
 type SearchResult = {
@@ -216,7 +216,7 @@ function SearchPageInner() {
                     >
                       View details
                     </Link>
-                    {hasFlipbook(r.slug) && q.trim() && (
+                    {publicationSupportsFlipbook(r) && q.trim() && (
                       <Link
                         href={`/flipbook/${r.slug}?q=${encodeURIComponent(q.trim())}`}
                         className="rounded bg-[var(--icai-gold)] px-3 py-1 text-sm font-semibold text-[var(--icai-navy)]"

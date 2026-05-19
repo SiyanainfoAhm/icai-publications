@@ -4,6 +4,7 @@ import { CoverImage } from "@/components/CoverImage";
 import { PublicationReadActions } from "@/components/PublicationReadActions";
 import { CATALOGUE_COVER_ASPECT } from "@/lib/covers";
 import { fetchPublicationBySlug } from "@/lib/data/publications";
+import { publicationSupportsFlipbook } from "@/lib/flipbook";
 
 export default async function PublicationDetailPage({
   params,
@@ -51,7 +52,10 @@ export default async function PublicationDetailPage({
             <p className="mt-2 text-sm text-slate-500">Release date: {date}</p>
           )}
           <p className="mt-6 leading-relaxed text-slate-700">{publication.synopsis}</p>
-          <PublicationReadActions slug={slug} />
+          <PublicationReadActions
+            slug={slug}
+            supportsFlipbook={publicationSupportsFlipbook(publication)}
+          />
         </section>
       </div>
     </article>

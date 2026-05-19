@@ -3,8 +3,8 @@ import { FlipbookReader } from "@/components/reader/FlipbookReader";
 import { canAccessFlipbook } from "@/lib/auth/access";
 import { getTokenFromCookies, resolveSessionUser } from "@/lib/auth/session";
 import { fetchPublicationBySlug } from "@/lib/data/publications";
-import { getFlipbookPages } from "@/lib/flipbook-content";
-import { hasFlipbook } from "@/lib/flipbook";
+import { resolveFlipbookPages } from "@/lib/flipbook-content";
+import { publicationSupportsFlipbook } from "@/lib/flipbook";
 import { getSupabaseAdmin } from "@/lib/supabase/admin";
 
 export const dynamic = "force-dynamic";
@@ -19,10 +19,18 @@ export default async function FlipbookPage({
 }) {
   const { slug } = await params;
   const sp = await searchParams;
-  if (!hasFlipbook(slug)) notFound();
 
   const publication = await fetchPublicationBySlug(slug);
   if (!publication) notFound();
+  if (!publicationSupportsFlipbook(publication)) notFound();
+
+  const pages = resolveFlipbookPages(slug, {
+    title: publication.title,
+    synopsis: publication.synopsis,
+    topic: publication.topic,
+    committee: publication.committee,
+  });
+  if (pages.length === 0) notFound();
 
   const token = await getTokenFromCookies();
   const user = await resolveSessionUser(token);
@@ -40,8 +48,7 @@ export default async function FlipbookPage({
     user_agent: null,
   });
 
-  const pages = getFlipbookPages(slug);
-  const pageCount = pages?.length ?? 0;
+  const pageCount = pages.length;
   let initialPage = 0;
   if (sp.page) {
     const n = parseInt(sp.page, 10);
@@ -55,6 +62,8 @@ export default async function FlipbookPage({
       backHref={`/publications/${slug}`}
       initialPage={initialPage}
       highlightQuery={sp.q ?? ""}
+      pages={pages}
+      coverUrl={publication.cover_image_url}
     />
   );
 }

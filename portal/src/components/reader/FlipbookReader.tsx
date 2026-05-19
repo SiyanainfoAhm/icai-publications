@@ -51,6 +51,8 @@ type FlipbookReaderProps = {
   backHref: string;
   initialPage?: number;
   highlightQuery?: string;
+  pages?: FlipbookPage[];
+  coverUrl?: string | null;
 };
 
 export function FlipbookReader({
@@ -59,9 +61,14 @@ export function FlipbookReader({
   backHref,
   initialPage = 0,
   highlightQuery = "",
+  pages: pagesProp,
+  coverUrl,
 }: FlipbookReaderProps) {
   const router = useRouter();
-  const pages = useMemo(() => getFlipbookPages(slug) ?? [], [slug]);
+  const pages = useMemo(
+    () => pagesProp ?? getFlipbookPages(slug) ?? [],
+    [pagesProp, slug],
+  );
   const pageCount = pages.length;
 
   const [page, setPage] = useState(initialPage);
@@ -139,7 +146,8 @@ export function FlipbookReader({
   };
 
   const coverSrc =
-    slug === "ca-journal-may-2026" ? "/covers/ca-journal.png" : "/covers/default.svg";
+    coverUrl?.trim() ||
+    (slug === "ca-journal-may-2026" ? "/covers/ca-journal.png" : "/covers/default.svg");
 
   const current: FlipbookPage | undefined = pages[page];
   const zoomStyle =

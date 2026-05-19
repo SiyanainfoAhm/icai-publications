@@ -3,17 +3,11 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { canAccessReader } from "@/lib/auth/access";
-import { hasFlipbook } from "@/lib/flipbook";
+import { publicationSupportsFlipbook } from "@/lib/flipbook";
 import type { PublicationMeta, SessionUser } from "@/lib/types";
 
 function readHref(publication: PublicationMeta): string {
-  if (hasFlipbook(publication.slug)) {
-    return `/flipbook/${publication.slug}`;
-  }
-  if (
-    publication.publication_type === "pdf_publication" ||
-    publication.publication_type === "pdf_article"
-  ) {
+  if (publicationSupportsFlipbook(publication)) {
     return `/flipbook/${publication.slug}`;
   }
   return `/reader/${publication.slug}`;

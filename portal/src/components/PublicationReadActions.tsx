@@ -3,13 +3,18 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { canAccessFlipbook } from "@/lib/auth/access";
-import { hasFlipbook } from "@/lib/flipbook";
 import type { SessionUser } from "@/lib/types";
 
-export function PublicationReadActions({ slug }: { slug: string }) {
+export function PublicationReadActions({
+  slug,
+  supportsFlipbook = true,
+}: {
+  slug: string;
+  supportsFlipbook?: boolean;
+}) {
   const [user, setUser] = useState<SessionUser | null>(null);
   const [ready, setReady] = useState(false);
-  const flipbook = hasFlipbook(slug);
+  const flipbook = supportsFlipbook;
 
   useEffect(() => {
     fetch("/api/auth/me", { credentials: "include" })
